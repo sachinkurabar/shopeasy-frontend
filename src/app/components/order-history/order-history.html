@@ -1,0 +1,76 @@
+ 
+<section class="orders-page">
+  <div class="orders-container">
+    <h1>My Orders</h1>
+    <p class="subtitle">View your ShopEasy purchase history.</p>
+    <p style="color: green; font-weight: bold;">
+</p>
+
+    @if (loading) {
+      <div class="message">Loading your orders...</div>
+    } @else if (errorMessage) {
+      <div class="error-message">{{ errorMessage }}</div>
+      <button class="retry-button" (click)="loadOrders()">
+        Try Again
+      </button>
+    } @else if (orders.length === 0) {
+      <div class="empty-state">
+        <div class="empty-icon">📦</div>
+        <h2>No orders yet</h2>
+        <p>Your placed orders will appear here.</p>
+        <a routerLink="/products">Explore Products</a>
+      </div>
+    } @else {
+      <div class="orders-list">
+        @for (order of orders; track order.orderId) {
+          <article class="order-card">
+            <div class="order-header">
+              <div>
+                <span class="label">Order ID</span>
+                <h2>#SE-{{ order.orderId }}</h2>
+              </div>
+
+              <div class="order-status">
+                {{ order.status }}
+              </div>
+            </div>
+
+            <div class="order-details">
+              <p>
+                <strong>Order date:</strong>
+                {{ order.orderDate | date:'dd MMM yyyy, h:mm a' }}
+              </p>
+
+              <p>
+                <strong>Customer:</strong>
+                {{ order.customerName }}
+              </p>
+            </div>
+
+            <div class="items-list">
+              @for (item of order.items; track $index) {
+                <div class="item-row">
+                  <div class="item-info">
+                    <strong>{{ item.productName }}</strong>
+                    <span>Quantity: {{ item.quantity }}</span>
+                  </div>
+
+                  <div class="item-price">
+                    {{ item.subtotal | currency:'INR':'symbol':'1.2-2' }}
+                  </div>
+                </div>
+              }
+            </div>
+
+            <div class="order-total">
+              <span>Total Amount</span>
+              <strong>
+                {{ order.totalAmount | currency:'INR':'symbol':'1.2-2' }}
+              </strong>
+            </div>
+          </article>
+        }
+      </div>
+    }
+  </div>
+</section>

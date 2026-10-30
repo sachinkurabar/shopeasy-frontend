@@ -1,0 +1,14 @@
+
+<section class="featured-products">
+  <h2>Featured Products</h2>
+
+  <p class="product-count">
+    Products loaded: {{ products.length }}
+  </p>
+
+  <div class="products">
+    @for (product of products; track product.id) {
+      <app-product-card [product]="product"></app-product-card>
+    }
+  </div>
+</section>

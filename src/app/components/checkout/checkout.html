@@ -1,0 +1,126 @@
+
+<section class="checkout-page">
+
+  @if (orderPlaced) {
+    <div class="order-success">
+      <h2>Order Placed Successfully!</h2>
+      <p>Thank you for shopping with ShopEasy.</p>
+
+      <p>
+        <strong>Order Number:</strong>
+        {{ orderNumber }}
+      </p>
+
+      <p>
+        <strong>Order Total:</strong>
+        {{ confirmedTotal | currency:'INR':'symbol':'1.2-2' }}
+      </p>
+
+      <p>Your cart has been cleared.</p>
+      <div class="success-actions">
+  <a routerLink="/orders">View My Orders</a>
+  <a routerLink="/products">Continue Shopping</a>
+</div>
+    </div>
+  } @else {
+    <h2>Checkout</h2>
+    <p>Enter your delivery details.</p>
+
+    <form [formGroup]="deliveryForm" (ngSubmit)="onSubmit()">
+
+      <h3>Delivery Information</h3>
+
+      <label for="fullName">Full Name</label>
+      <input id="fullName" type="text" formControlName="fullName" />
+      @if (deliveryForm.controls['fullName'].touched &&
+           deliveryForm.controls['fullName'].invalid) {
+        <small class="error">Please enter your full name.</small>
+      }
+
+      <label for="email">Email Address</label>
+      <input id="email" type="email" formControlName="email" />
+      @if (deliveryForm.controls['email'].touched &&
+           deliveryForm.controls['email'].invalid) {
+        <small class="error">Enter a valid email address.</small>
+      }
+
+      <label for="mobile">Mobile Number</label>
+      <input id="mobile" type="tel" maxlength="10"
+             formControlName="mobile" />
+      @if (deliveryForm.controls['mobile'].touched &&
+           deliveryForm.controls['mobile'].invalid) {
+        <small class="error">Enter a valid 10-digit mobile number.</small>
+      }
+
+      <label for="address">Delivery Address</label>
+      <textarea id="address" formControlName="address"></textarea>
+      @if (deliveryForm.controls['address'].touched &&
+           deliveryForm.controls['address'].invalid) {
+        <small class="error">Please enter your address.</small>
+      }
+
+      <label for="city">City</label>
+      <input id="city" type="text" formControlName="city" />
+      @if (deliveryForm.controls['city'].touched &&
+           deliveryForm.controls['city'].invalid) {
+        <small class="error">Please enter your city.</small>
+      }
+
+      <label for="state">State</label>
+      <input id="state" type="text" formControlName="state" />
+      @if (deliveryForm.controls['state'].touched &&
+           deliveryForm.controls['state'].invalid) {
+        <small class="error">Please enter your state.</small>
+      }
+
+      <label for="pincode">PIN Code</label>
+      <input id="pincode" type="text" maxlength="6"
+             inputmode="numeric" formControlName="pincode" />
+      @if (deliveryForm.controls['pincode'].touched &&
+           deliveryForm.controls['pincode'].invalid) {
+        <small class="error">Enter a valid 6-digit PIN code.</small>
+      }
+
+      <hr />
+
+      <h3>Order Summary</h3>
+
+      @if (cartItems.length > 0) {
+        @for (item of cartItems; track item.id) {
+          <div class="order-item">
+            <div>
+              <strong>{{ item.name }}</strong>
+              <p>Quantity: {{ getQuantity(item) }}</p>
+            </div>
+
+            <span>
+              {{ item.price * getQuantity(item)
+                | currency:'INR':'symbol':'1.2-2' }}
+            </span>
+          </div>
+        }
+
+        <hr />
+
+        <div class="order-total">
+          <strong>Total Amount</strong>
+          <strong>
+            {{ totalPrice | currency:'INR':'symbol':'1.2-2' }}
+          </strong>
+        </div>
+
+        @if (orderError) {
+          <p class="error">{{ orderError }}</p>
+        }
+
+        <button type="submit" [disabled]="placingOrder">
+          {{ placingOrder ? 'Placing Order...' : 'Place Order' }}
+        </button>
+      } @else {
+        <p>Your cart is empty. Please add products before checkout.</p>
+      }
+
+    </form>
+  }
+
+</section>

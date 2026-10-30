@@ -1,0 +1,33 @@
+
+<div class="product-card">
+  <div class="product-image">
+    <img
+src="products/samsung-s26-small.jpg"
+      [alt]="product.name"
+    />
+  </div>
+
+  <div class="product-info">
+    <h3>{{ product.name }}</h3>
+
+    <p class="description">
+      {{ product.description }}
+    </p>
+
+    <p class="price">
+      ₹{{ formatPrice(product.price) }}
+    </p>
+
+    <p class="stock">
+      Stock: {{ product.stock }}
+    </p>
+
+   <button
+  type="button"
+  [disabled]="product.stock === 0"
+  (click)="addToCart()"
+>
+  Add to Cart
+</button>
+  </div>
+</div>
